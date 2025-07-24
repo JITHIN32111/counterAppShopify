@@ -1,11 +1,13 @@
 import express from 'express';
-import {createTimer,getAllTimers} from '../controllers/timerController.js';
+import {createTimer,getAllTimers,getTimer} from '../controllers/timerController.js';
 
 const router = express.Router();
 
 
 router.post('/timers', createTimer);
-router.get('/getTimer', getAllTimers);
+router.get('/', getTimer);
+router.get('/all', getAllTimers);
+
 
 
 export default router;

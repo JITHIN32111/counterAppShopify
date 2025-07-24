@@ -1,26 +1,39 @@
 import Timer from '../models/Timer.js';
 
-// Get all timers for a shop
-    export const getAllTimers = async (req, res) => {
-      console.log(":::::::::::::::::::");
-      
-      try {
-        const timer = await Timer.findOne();
 
-  res.json({ success: true, timer });
-      } catch (error) {
-        console.error('Error fetching timers:', error);
-        res.status(500).json({ success: false, error: 'Failed to fetch timers', message: error.message });
-      }
-    };
+export const getTimer = async (req, res) => {
+  try {
+    const now = new Date();
+
+    const timers = await Timer.find({
+      $or: [
+        { startDate: { $gte: now } }, // Coming Soon
+        { endDate: { $gte: now } }    // Active
+      ],
+      isActive: true
+    }).sort({ startDate: 1 }); // Optional: sort by upcoming first
+   if (!timers) {
+      console.log("((((");
+      
+      return res.json({ success: true, timers: null });
+    }
+    res.json({ success: true, timers });
+
+  } catch (error) {
+    console.error('Error fetching timers:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch timers' });
+  }
+};
+
+
 
 // Get a single timer by ID
-export const getTimer = async (req, res) => {
+export const getAllTimers = async (req, res) => {
   try {
     const shop = res.locals.shopify.session.shop;
     const timerId = req.params.id;
 
-    const timer = await Timer.findOne({ _id: timerId, shop });
+    const timer = await Timer.find();
 
     if (!timer) {
       return res.status(404).json({ success: false, error: 'Timer not found' });
@@ -36,9 +49,8 @@ export const getTimer = async (req, res) => {
 // Create a new timer
 export const createTimer = async (req, res) => {
   console.log(":::::::::::::::::::::::::::::::::::::::::");
-  
-    console.log(req.body);
-    
+  console.log(req.body);
+
   try {
     const shop = res.locals.shopify.session.shop;
     const timerData = { ...req.body, shop };
@@ -47,19 +59,40 @@ export const createTimer = async (req, res) => {
     const endDate = new Date(timerData.endDate);
 
     if (startDate >= endDate) {
-      return res.status(400).json({ success: false, error: 'End date must be after start date' });
+      return res.status(400).json({ success: false, message: 'End date must be after start date' });
     }
 
     if (endDate <= new Date()) {
-      return res.status(400).json({ success: false, error: 'End date must be in the future' });
+      return res.status(400).json({ success: false, message: 'End date must be in the future' });
+    }
+
+    // ✅ Check for overlapping timers for this shop
+    const existingTimer = await Timer.findOne({
+      shop,
+      $or: [
+        {
+          startDate: { $lt: endDate },
+          endDate: { $gt: startDate }
+        }
+      ]
+    });
+
+    if (existingTimer) {
+      return res.status(409).json({
+        success: false,
+        error: 'Timer conflict',
+        message: 'A timer already exists during the selected time range.'
+      });
     }
 
     const timer = new Timer(timerData);
     await timer.save();
 
     res.status(201).json({ success: true, timer, message: 'Timer created successfully' });
+
   } catch (error) {
     console.error('Error creating timer:', error);
+
     if (error.name === 'ValidationError') {
       const validationErrors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({ success: false, error: 'Validation failed', validationErrors });
