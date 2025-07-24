@@ -1,0 +1,68 @@
+<div id="countdown-timer" style="padding: 1rem; background: #f9f9f9; text-align: center; border-radius: 8px;">
+  <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔥 Limited Time kaiiiiiiii</h2>
+  <p style="font-size: 1rem; color: #555;">Hurry up! Offer ends in:</p>
+  <span id="timer-text" style="font-weight: bold; font-size: 1.25rem;">Loading5...</span>
+</div>
+
+<script>
+  async function ajaxApi() {
+    try {
+      const response = await fetch('/apps/countdown');
+      const data = await response.json();
+
+      if (data?.timer?.startDate && data?.timer?.endDate) {
+        const now = new Date();
+        const start = new Date(data.timer.startDate);
+        const end = new Date(data.timer.endDate);
+
+        if (now < start) {
+          document.getElementById('timer-text').textContent = 'Coming soon!';
+          return;
+        }
+
+        if (now >= end) {
+          document.getElementById('timer-text').textContent = 'Offer expired!';
+          return;
+        }
+
+        // Start countdown
+        const timerElement = document.getElementById('timer-text');
+        const updateCountdown = () => {
+          const now = new Date();
+          const timeLeft = end - now;
+
+          if (timeLeft <= 0) {
+            clearInterval(interval);
+            timerElement.textContent = 'Offer expired!';
+            return;
+          }
+
+          const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+          const seconds = Math.floor((timeLeft / 1000) % 60);
+
+          timerElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+        };
+
+        updateCountdown(); // initial call
+        const interval = setInterval(updateCountdown, 1000);
+      } else {
+        document.getElementById('timer-text').textContent = 'No active timer';
+      }
+    } catch (error) {
+      console.error('Countdown API Error:', error);
+      document.getElementById('timer-text').textContent = 'Error loading timer';
+    }
+  }
+
+  ajaxApi();
+</script>
+
+
+{% schema %}
+{
+  "name": "Countdown Timer",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}

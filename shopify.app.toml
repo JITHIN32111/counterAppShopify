@@ -3,7 +3,7 @@
 client_id = "d45af4c8b320f028b09ef266aa78775e"
 name = "kkk"
 handle = "kkk-12"
-application_url = "https://weed-laser-cruises-routers.trycloudflare.com"
+application_url = "https://deborah-evans-nominated-shorter.trycloudflare.com"
 embedded = true
 
 [build]
@@ -18,7 +18,7 @@ api_version = "2025-07"
 scopes = "write_themes,read_themes,unauthenticated_read_content,write_products"
 
 [auth]
-redirect_urls = ["https://weed-laser-cruises-routers.trycloudflare.com/auth/callback", "https://weed-laser-cruises-routers.trycloudflare.com/auth/shopify/callback", "https://weed-laser-cruises-routers.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://deborah-evans-nominated-shorter.trycloudflare.com/auth/callback", "https://deborah-evans-nominated-shorter.trycloudflare.com/auth/shopify/callback", "https://deborah-evans-nominated-shorter.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false
