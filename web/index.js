@@ -49,7 +49,7 @@ app.use("/api/*", shopify.validateAuthenticatedSession());
 
 
 app.use(express.json());
-app.use("/api/counter", timerRoutes);
+app.use("/api1/counter", timerRoutes);
 
 app.get("/api/products/count", async (_req, res) => {
     console.log("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");

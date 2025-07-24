@@ -1,17 +1,18 @@
 import Timer from '../models/Timer.js';
 
 // Get all timers for a shop
-export const getAllTimers = async (req, res) => {
-  try {
-    const shop = res.locals.shopify.session.shop;
-    const timers = await Timer.findByShop(shop);
+  export const getAllTimers = async (req, res) => {
+    console.log(":::::::::::::::::::");
+    
+    try {
+      const timer = await Timer.findOne();
 
-    res.json({ success: true, timers, count: timers.length });
-  } catch (error) {
-    console.error('Error fetching timers:', error);
-    res.status(500).json({ success: false, error: 'Failed to fetch timers', message: error.message });
-  }
-};
+res.json({ success: true, timer });
+    } catch (error) {
+      console.error('Error fetching timers:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch timers', message: error.message });
+    }
+  };
 
 // Get a single timer by ID
 export const getTimer = async (req, res) => {
