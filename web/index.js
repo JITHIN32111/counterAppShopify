@@ -52,7 +52,6 @@ app.use(express.json());
 app.use("/api/counter", timerRoutes);
 app.use("/timer/getTimer", timerRoutes);
 
-
 app.get("/api/products/count", async (_req, res) => {
     console.log("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
   

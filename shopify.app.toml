@@ -3,7 +3,7 @@
 client_id = "d45af4c8b320f028b09ef266aa78775e"
 name = "kkk"
 handle = "kkk-12"
-application_url = "https://coverage-collections-tribune-curriculum.trycloudflare.com"
+application_url = "https://posts-silver-threat-wm.trycloudflare.com"
 embedded = true
 
 [build]
@@ -18,7 +18,7 @@ api_version = "2025-07"
 scopes = "write_themes,read_themes,unauthenticated_read_content,write_products"
 
 [auth]
-redirect_urls = ["https://coverage-collections-tribune-curriculum.trycloudflare.com/auth/callback", "https://coverage-collections-tribune-curriculum.trycloudflare.com/auth/shopify/callback", "https://coverage-collections-tribune-curriculum.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://posts-silver-threat-wm.trycloudflare.com/auth/callback", "https://posts-silver-threat-wm.trycloudflare.com/auth/shopify/callback", "https://posts-silver-threat-wm.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

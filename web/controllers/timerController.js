@@ -31,20 +31,19 @@ export const getTimer = async (req, res) => {
 export const getAllTimers = async (req, res) => {
   try {
     const shop = res.locals.shopify.session.shop;
-    const timerId = req.params.id;
+    const timers = await Timer.find({ shop });
 
-    const timer = await Timer.find();
-
-    if (!timer) {
-      return res.status(404).json({ success: false, error: 'Timer not found' });
+    if (!timers || timers.length === 0) {
+      return res.status(404).json({ success: false, error: 'No timers found' });
     }
 
-    res.json({ success: true, timer });
+    res.json(timers);
   } catch (error) {
     console.error('Error fetching timer:', error);
     res.status(500).json({ success: false, error: 'Failed to fetch timer', message: error.message });
   }
 };
+
 
 // Create a new timer
 export const createTimer = async (req, res) => {
